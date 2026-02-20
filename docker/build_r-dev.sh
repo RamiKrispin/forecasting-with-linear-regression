@@ -4,7 +4,7 @@ echo "Build the docker"
 
 # Parameters
 user_name="rkrispin"
-image_label="r-dev"
+image_label="flr-dev"
 
 # Setting the image name
 ver=0.0.1
