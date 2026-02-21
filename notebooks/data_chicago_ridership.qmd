@@ -1,0 +1,48 @@
+---
+title: "Chicago Ridership Data"
+author: "Rami Krispin"
+date: last-modified
+format: 
+  html:
+    code-fold: false 
+    warning: false
+    toc: true
+---
+
+Data source: https://data.cityofchicago.org/Transportation/CTA-Ridership-Daily-Boarding-Totals/6iiy-9s97/about_data
+
+
+```{r}
+file_path <- paste(here::here(), "data/raw/CTA_-_Ridership_-_Daily_Boarding_Totals_20260216.csv", sep = "/")
+
+df <- read.csv(file_path) |>
+    dplyr::mutate(date = lubridate::mdy(service_date)) |>
+    dplyr::select(date, bus, rail_boardings, total_rides) |>
+    dplyr::filter(date >= as.Date("2022-01-01"))
+
+str(df)
+df |> head()
+```
+
+
+```{r}
+plotly::plot_ly(data = df) |>
+    plotly::add_lines(x = ~date, y = ~bus, name = "Bus") |>
+    plotly::add_lines(x = ~date, y = ~rail_boardings, name = "Rail") |>
+    plotly::layout(
+        title = "Chicago Daily Ridership - Daily Boarding",
+        yaxis = list(title = "Num. of Boarding"), xaxis = list(title = "Date")
+    )
+```
+
+Save the data as R object:
+```{r}
+cta_ridership <- df
+save(cta_ridership, file =  paste(here::here(),"/data/RData/cta_ridership.RData", sep = ""))
+```
+
+Save the data as CSV file:
+
+```{r}
+write.csv(cta_ridership, paste(here::here(),"/data/csv/cta_ridership.csv", sep = ""), row.names = FALSE)
+```

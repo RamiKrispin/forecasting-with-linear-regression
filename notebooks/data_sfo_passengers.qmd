@@ -1,0 +1,20 @@
+---
+title: "SFO Air Passengers Data"
+author: "Rami Krispin"
+date: last-modified
+format: 
+  html:
+    code-fold: false 
+    warning: false
+    toc: true
+---
+
+Reference: [DataSF](https://data.sfgov.org/Transportation/Air-Traffic-Passenger-Statistics/rkru-6vcg/about_data)
+
+
+
+```{r}
+df <- read.csv(paste(here::here(), "data/raw/Air_Traffic_Passenger_Statistics_20251123.csv", sep = "/"))
+
+df |> head()
+```
