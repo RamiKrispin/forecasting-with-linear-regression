@@ -101,7 +101,8 @@ head(ca_consumers_n_gas)
 Save the data to a CSV file:
 
 ```{r}
-write.csv(ca_consumers_n_gas, "data/gold/ca_consumers_n_gas.csv", row.names = FALSE)
+file_path <- paste(here::here(), "data/csv/ca_consumers_n_gas.csv", sep = "/")
+write.csv(ca_consumers_n_gas,file_path, row.names = FALSE)
 ```
 
 ```{r}
@@ -257,7 +258,8 @@ ca_electricty <- ts_3 |>
 Save the data:
 
 ```{r}
-write.csv(ca_electricty, "data/gold/ca_electricty.csv", row.names = FALSE)
+file_path <- paste(here::here(), "data/csv/ca_electricty.csv", sep = "/")
+write.csv(ca_electricty, file_path, row.names = FALSE)
 ```
 
 
@@ -274,5 +276,5 @@ xaxis = list(title = "Period"))
 
 ```{r}
 save(ca_consumers_n_gas, us_natural_gas, ca_electricty, 
-file = paste(here::here(),"data/silver/energy.RData", sep = "/"))
+file = paste(here::here(),"data/RData/energy.RData", sep = "/"))
 ```
