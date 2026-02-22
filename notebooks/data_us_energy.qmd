@@ -93,7 +93,8 @@ head(ts_1)
 ca_consumers_n_gas <- ts_1 |>
     dplyr::select(index = period, y = value, series_id = duoarea) |>
     dplyr::filter(index > 1986) |>
-    as_tsibble(index = index)
+    as_tsibble(index = index) |>
+    dplyr::select(index, y)
 
 head(ca_consumers_n_gas)
 ```
@@ -174,6 +175,8 @@ us_natural_gas <- ts_2 |>
     dplyr::select(index, date, y = value, series_id = duoarea) |>
     dplyr::arrange(date) |>
     as_tsibble(index = index)
+
+us_natural_gas |> head()
 ```
 
 And plot it:
@@ -188,7 +191,10 @@ xaxis = list(title = "Period"))
 Save the data:
 
 ```{r}
-write.csv(us_natural_gas,paste(here::here(), "data/csv/us_natural_gas.csv", sep = "/"), row.names = FALSE)
+us_natural_gas <- us_natural_gas |> 
+as.data.frame() |>
+dplyr::select(date, y)
+write.csv(us_natural_gas, paste(here::here(), "data/csv/us_natural_gas.csv", sep = "/"), row.names = FALSE)
 ```
 
 ## Hourly Demand for Electricity in California by Balancing Authority Subregion PGAE
@@ -259,7 +265,7 @@ Save the data:
 
 ```{r}
 file_path <- paste(here::here(), "data/csv/ca_electricty.csv", sep = "/")
-write.csv(ca_electricty, file_path, row.names = FALSE)
+write.csv(ca_electricty |> dplyr::select(index, y), file_path, row.names = FALSE)
 ```
 
 
@@ -275,6 +281,7 @@ xaxis = list(title = "Period"))
 ## Saving the Data
 
 ```{r}
-save(ca_consumers_n_gas, us_natural_gas, ca_electricty, 
-file = paste(here::here(),"data/RData/energy.RData", sep = "/"))
+save(ca_consumers_n_gas, us_natural_gas, ca_electricty |> dplyr::select(index, y),
+    file = paste(here::here(), "data/RData/energy.RData", sep = "/")
+)
 ```
