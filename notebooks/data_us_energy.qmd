@@ -169,12 +169,12 @@ And reformat it:
 ```{r}
 us_natural_gas <- ts_2 |>
     dplyr::mutate(
-        date = lubridate::ym(period),
-        index = yearmonth(date)
+        index = lubridate::ym(period),
+        index2 = yearmonth(index)
     ) |>
-    dplyr::select(index, date, y = value, series_id = duoarea) |>
-    dplyr::arrange(date) |>
-    as_tsibble(index = index)
+    dplyr::select(index, index2, y = value, series_id = duoarea) |>
+    dplyr::arrange(index) |>
+    as_tsibble(index = index2)
 
 us_natural_gas |> head()
 ```
@@ -182,10 +182,12 @@ us_natural_gas |> head()
 And plot it:
 
 ```{r}
-plot_ly(data = us_natural_gas, x = ~ date, y = ~ y, type = "scatter", mode = "lines") |>
-plotly::layout(title = "US Monthly Demand for Natural Gas", 
-yaxis = list(title = "MMCF"),
-xaxis = list(title = "Period")) 
+plot_ly(data = us_natural_gas, x = ~index, y = ~y, type = "scatter", mode = "lines") |>
+    plotly::layout(
+        title = "US Monthly Demand for Natural Gas",
+        yaxis = list(title = "MMCF"),
+        xaxis = list(title = "Period")
+    )
 ```
 
 Save the data:
@@ -193,7 +195,7 @@ Save the data:
 ```{r}
 us_natural_gas <- us_natural_gas |> 
 as.data.frame() |>
-dplyr::select(date, y)
+dplyr::select(index, y)
 write.csv(us_natural_gas, paste(here::here(), "data/csv/us_natural_gas.csv", sep = "/"), row.names = FALSE)
 ```
 
