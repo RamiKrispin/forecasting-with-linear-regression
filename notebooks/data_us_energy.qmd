@@ -91,10 +91,10 @@ head(ts_1)
 
 ```{r}
 ca_consumers_n_gas <- ts_1 |>
-    dplyr::select(index = period, y = value, series_id = duoarea) |>
-    dplyr::filter(index > 1986) |>
-    as_tsibble(index = index) |>
-    dplyr::select(index, y)
+    dplyr::select(year = period, y = value, series_id = duoarea) |>
+    dplyr::filter(year > 1986) |>
+    as_tsibble(index = year) |>
+    dplyr::select(year, y)
 
 head(ca_consumers_n_gas)
 ```
@@ -107,7 +107,7 @@ write.csv(ca_consumers_n_gas,file_path, row.names = FALSE)
 ```
 
 ```{r}
-plot_ly(data = ca_consumers_n_gas, x = ~ index, y = ~ y, type = "scatter", mode = "lines") |>
+plot_ly(data = ca_consumers_n_gas, x = ~ year, y = ~ y, type = "scatter", mode = "lines") |>
 plotly::layout(title = "Number of Natural Gas Consumers in California", 
 yaxis = list(title = "Number of Consumers"),
 xaxis = list(title = "Period")) 
@@ -169,12 +169,12 @@ And reformat it:
 ```{r}
 us_natural_gas <- ts_2 |>
     dplyr::mutate(
-        index = lubridate::ym(period),
-        index2 = yearmonth(index)
+        date = lubridate::ym(period),
+        index = yearmonth(date)
     ) |>
-    dplyr::select(index, index2, y = value, series_id = duoarea) |>
-    dplyr::arrange(index) |>
-    as_tsibble(index = index2)
+    dplyr::select(date, index, y = value, series_id = duoarea) |>
+    dplyr::arrange(date) |>
+    as_tsibble(index = date)
 
 us_natural_gas |> head()
 ```
@@ -195,7 +195,7 @@ Save the data:
 ```{r}
 us_natural_gas <- us_natural_gas |> 
 as.data.frame() |>
-dplyr::select(index, y)
+dplyr::select(date, y)
 write.csv(us_natural_gas, paste(here::here(), "data/csv/us_natural_gas.csv", sep = "/"), row.names = FALSE)
 ```
 
@@ -258,8 +258,8 @@ Converting the series to a `tsibble` object:
 ```{r}
 ca_electricty <- ts_3 |>
     dplyr::distinct() |>
-    dplyr::select(index = time, y = value, series_id = subba) |>
-    as_tsibble(index = index)
+    dplyr::select(date_time = time, y = value, series_id = subba) |>
+    as_tsibble(index = date_time)
 ```
 
 
@@ -267,7 +267,7 @@ Save the data:
 
 ```{r}
 file_path <- paste(here::here(), "data/csv/ca_electricty.csv", sep = "/")
-write.csv(ca_electricty |> dplyr::select(index, y), file_path, row.names = FALSE)
+write.csv(ca_electricty |> dplyr::select(date_time, y), file_path, row.names = FALSE)
 ```
 
 
